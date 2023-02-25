@@ -30,7 +30,7 @@ class _LogInScreenState extends State<LogInScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Registro",
+                "Hola, de nuevo!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 25,

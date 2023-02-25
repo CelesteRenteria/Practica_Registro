@@ -62,7 +62,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 }, child: const Text("Iniciar Sesión"))  
                 ],
               ),
-                const SizedBox(height: 30),
                 CustonTextFormField(labelTxt: 'Nombre de usuario', preIcon: const Icon(Icons.person_outlined), onChanged: (value) {
                   //El set state actualiza el estado
                  setState(() {
