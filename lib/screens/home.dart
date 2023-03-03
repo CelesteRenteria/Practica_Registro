@@ -6,6 +6,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+              resizeToAvoidBottomInset: false, 
+
       body: Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -39,8 +41,7 @@ class HomeScreen extends StatelessWidget {
                   "Explora las mejores opciones laborales\nbasadas en tus intereses y estudios",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                  const 
-                  SizedBox(height: 60,),
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

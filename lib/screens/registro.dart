@@ -1,5 +1,11 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+
+import '../controllers/sign_up_controller.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -25,12 +31,14 @@ class _RegistroScreenState extends State<RegistroScreen> {
   String fecha = "";
   String gender = "";
   int choice = 0;
-
+  final controller = Get.put(SignUpController());
   RadioOptions valueRadio = RadioOptions.uno;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+              resizeToAvoidBottomInset: false, 
+
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -62,25 +70,33 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 }, child: const Text("Iniciar Sesión"))  
                 ],
               ),
-                CustonTextFormField(labelTxt: 'Nombre de usuario', preIcon: const Icon(Icons.person_outlined), onChanged: (value) {
+              // GetBuilder<SignUpController>(
+              //   builder: (context) {
+              //     return GestureDetector(
+              //           onTap:(){
+              //             controller.uploadLocalImage();
+              //           },
+              //           child: controller.image == null?
+              //           const Image(image:NetworkImage("https://cdn-icons-png.flaticon.com/512/149/149071.png"))
+              //           : Image(image: NetworkImage(controller.profileImage),)
+              //         );
+              //   }
+              // ),
+                CustonTextFormField(
+                  
+                  labelTxt: 'Nombre de usuario', preIcon: const Icon(Icons.person_outlined), onChanged: (value) {
                   //El set state actualiza el estado
-                 setState(() {
-                    userName = value; 
-                 });
+                 controller.handleName(value);
                 } ,),
                 const SizedBox(height: 10),
                 CustonTextFormField(labelTxt: 'Correo eléctronico', preIcon: const Icon(Icons.email), onChanged: (value) {
                   //El set state actualiza el estado
-                 setState(() {
-                    email = value; 
-                 });
+                 controller.handleEmail(value);
                 } ,),
                 const SizedBox(height: 10),
                 CustomTextFormFieldPassword(onChanged:(value) {
                   //El set state actualiza el estado
-                 setState(() {
-                    password = value; 
-                 });
+                 controller.handlePassword(value);
                 } ),
                 const SizedBox(height: 10),
                 CustonTextFormField(
@@ -138,50 +154,7 @@ DropdownButton(
                   });
                 }),
                  const SizedBox(height: 10),   
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Qué buscas?",style: styleSubTitle)),
-             const SizedBox(height: 10),
-
-   RadioListTile<RadioOptions>(
-    activeColor: const Color.fromARGB(255, 240, 103, 103),
-                value: RadioOptions.uno, 
-                groupValue: valueRadio,
-                title:  Text("Encontrar empleo", style:  TextStyle(
-                          color: Colors.grey[800],
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),),
-                 onChanged: (value){
-                  setState(() {
-                    valueRadio = value!;
-                  });
-                 }),
-                 RadioListTile<RadioOptions>(
-                  activeColor: const Color.fromARGB(255, 240, 103, 103),
-                value: RadioOptions.dos, 
-                groupValue: valueRadio,
-                title:  Text("Contratar talento",style: TextStyle(
-                          color: Colors.grey[800],
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold)),
-                 onChanged: (value){
-                 setState(() {
-                    valueRadio = value!;
-                  });
-                 }),
-                 RadioListTile<RadioOptions>(
-                  activeColor: const Color.fromARGB(255, 240, 103, 103),
-                value: RadioOptions.tres, 
-                groupValue: valueRadio,
-                title:  Text("Otro",style: TextStyle(
-                          color: Colors.grey[800],
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold)),
-                 onChanged: (value){
-                 setState(() {
-                    valueRadio = value!;
-                  });
-                 }),
+              
                 const SizedBox(height: 20),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -191,13 +164,7 @@ DropdownButton(
                       backgroundColor: const Color.fromARGB(255, 240, 103, 103),
                     ),
                     onPressed: () {
-                      debugPrint(userName);
-                      debugPrint(email);
-                      debugPrint(password);
-                      debugPrint(phone);
-                      debugPrint("$birthDate");
-                      debugPrint("Gender: $valueDropDown");
-                      debugPrint("$valueRadio");
+                      controller.handleSignUp();
               
                     },
                     child: const Text("Registrate",

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "279051773419",
+    "project_id": "cursoflutter-68e7a",
+    "storage_bucket": "cursoflutter-68e7a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279051773419:android:3f6d4477236d82026fa5ae",
+        "android_client_info": {
+          "package_name": "com.example.practica_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279051773419-3dgarbj23vnk1njlrg89oha188r05f2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUR3TJG0PwxsRJH_T9H2pbhDHlx20Ev1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279051773419-3dgarbj23vnk1njlrg89oha188r05f2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
