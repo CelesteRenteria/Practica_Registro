@@ -15,25 +15,65 @@ class SignUpController extends GetxController{
   String email="";
   String password ="";
  String name = "";
+ String phoneNumber = "";
+ String gender = "";
  XFile? image;
  String profileImage="";
+ bool validEmail=false;
+ bool validPhone =false;
+ String imageName="";
 
   handleName(String newName){
     name=newName;
     update();
   }
   handleEmail(String newEmail){
-    email = newEmail;
+    email = newEmail; 
+    if (email.isEmail) {
+      validEmail=true;
+    } else {
+      validEmail=false;
+    }
     update();
   }
+  
 
   handlePassword(String newPassword){
     password = newPassword;
     update();
   }
 
+  handlePhoneNumber(String newPhoneN){
+    phoneNumber = newPhoneN;
+    if (phoneNumber.isPhoneNumber) {
+      validPhone=true;
+    } else {
+      validPhone=false;
+    }
+    update();
+  }
+
+  handleGender(String newGender){
+    gender = newGender;
+    update();
+  }
+
 handleSignUp() async {
-    if (email == '' || password == '' || name == '') {
+    if (email == '' || password == '' || name == '' || gender==''||phoneNumber==''||image==null) {
+      Get.snackbar('Algún campo esta vacio', "",
+          backgroundColor: Colors.blue[100],
+          duration: const Duration(seconds: 5));
+      return;
+    }
+    if(validEmail==false){
+        Get.snackbar('Correo invalido', "",
+          backgroundColor: Colors.blue[100],
+          duration: const Duration(seconds: 5));
+      return;}
+    if(validPhone==false){
+       Get.snackbar('Número de teléfono invalido', "",
+          backgroundColor: Colors.blue[100],
+          duration: const Duration(seconds: 5));
       return;
     }
     try {
@@ -43,10 +83,13 @@ handleSignUp() async {
         password: password,
       );
       if (credential.user != null) {
+        await uploadImage(credential.user!.uid);
         final user = saveUserinDatabase(credential.user!.uid);
+        
         Get.offAll(() => ProfileScreen(
               usuario: user,
-               id:credential.user!.uid
+               id:credential.user!.uid,
+               imageName: imageName,
             ));
       }
     } on FirebaseAuthException catch (e) {
@@ -63,8 +106,8 @@ handleSignUp() async {
     }
   }
 
-  saveUserinDatabase(String id){
-    final user = Usuario(name:name, email:email);
+ Usuario saveUserinDatabase(String id){
+    final user = Usuario(name:name, email:email, imageProfile: profileImage, gender: gender, phoneNumber: phoneNumber);
     
     final db = FirebaseFirestore.instance;
     db
@@ -76,27 +119,31 @@ handleSignUp() async {
     return user;
   }
 
- uploadLocalImage()async{
-  final ImagePicker _picker = ImagePicker();
-  image = (await _picker.pickImage(source: ImageSource.camera))!;
+  uploadLocalImage() async {
+    final ImagePicker picker = ImagePicker(); // Capture a photo
+    image = await picker.pickImage(source: ImageSource.camera);
+    update();
+  }
 
-  update();
- }
 
- uploadImage(String id)async{
-if(image!=null){
-  final list = image!.name.split(".");
-  String ext = list.last;
-final storageRef = FirebaseStorage.instance.ref();
-// Create a reference to 'images/mountains.jpg'
-final mountainImagesRef = storageRef.child("imagesProfile/$id.$ext");
-try{
-  await mountainImagesRef.putFile(File(image!.path));
-  profileImage = await mountainImagesRef.getDownloadURL();
-}
-catch(e){
-
-}}
- }
+  Future<String> uploadImage(
+    String id,
+  ) async {
+    if (image != null) {
+      final lista = image!.name.split('.');
+      String ext = lista.last;
+      final storageRef = FirebaseStorage.instance.ref();
+      final mountainImagesRef = storageRef.child("imagesProfile/$id.$ext");
+      imageName ="imagesProfile/$id.$ext";
+      try {
+        await mountainImagesRef.putFile(File(image!.path));
+        profileImage = await mountainImagesRef.getDownloadURL();
+        return profileImage;
+      } catch (e) {
+        // ...
+      }
+    }
+    throw Exception('No tienes una imagen');
+  }
 
 }

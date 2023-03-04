@@ -37,7 +37,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-              resizeToAvoidBottomInset: false, 
 
       body: Container(
         width: double.infinity,
@@ -70,20 +69,31 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 }, child: const Text("Iniciar Sesión"))  
                 ],
               ),
-              // GetBuilder<SignUpController>(
-              //   builder: (context) {
-              //     return GestureDetector(
-              //           onTap:(){
-              //             controller.uploadLocalImage();
-              //           },
-              //           child: controller.image == null?
-              //           const Image(image:NetworkImage("https://cdn-icons-png.flaticon.com/512/149/149071.png"))
-              //           : Image(image: NetworkImage(controller.profileImage),)
-              //         );
-              //   }
-              // ),
+               GetBuilder<SignUpController>(builder: (context) {
+              return GestureDetector(
+                onTap: () {
+                  controller.uploadLocalImage();
+                },
+                child: SizedBox(
+                  width: 140,
+                  height: 140,
+                  child: ClipOval(
+                    child: controller.image == null
+                        ? const Image(
+                            image: NetworkImage(
+                                'https://firebasestorage.googleapis.com/v0/b/brial-wellness.appspot.com/o/imagenesAuxiliares%2FnuevoPerfil.png?alt=media&token=42fc4205-c677-483c-a486-7d392acaaca4'),
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(
+                            File(controller.image!.path),
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                ),
+              );
+            }),
+            const SizedBox(height: 10),
                 CustonTextFormField(
-                  
                   labelTxt: 'Nombre de usuario', preIcon: const Icon(Icons.person_outlined), onChanged: (value) {
                   //El set state actualiza el estado
                  controller.handleName(value);
@@ -100,34 +110,14 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 } ),
                 const SizedBox(height: 10),
                 CustonTextFormField(
+                  type: TextInputType.phone,
                   format:  FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                  labelTxt: 'Télefono', preIcon: const Icon(Icons.phone), onChanged: (value) {
-                  //El set state actualiza el estado
-                 setState(() {
-                    phone = value; 
-                 });
+                  labelTxt: 'Télefono', preIcon: const Icon(Icons.phone), 
+                  onChanged: (value) {
+                  controller.handlePhoneNumber(value);
                 } ,),
                 const SizedBox(height: 10),
-               Row(
-                 children: [
-                   Align(
-                    alignment: Alignment.centerLeft,
-                     child: TextButton.icon(
-                      label: Text("Fecha de nacimiento",style: styleHint,) ,
-                      icon:  Icon(Icons.calendar_month_outlined, color: Colors.grey[700],),
-                          //Como mostrar el valor de la fecha
-                          onPressed: () async{
-                            birthDate = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now().subtract(const Duration(days: 36500)), lastDate: DateTime.now()
-                            );
-                            setState(() {
-                              fecha = "${birthDate!.day}/${birthDate!.month}/${birthDate!.year}";
-                            });
-                          },),
-                   ),
-                   (birthDate==null) ?  Text("    ---",style: styleHint) :
-                   Text("    $fecha",style: styleHint)
-                 ],
-               ), 
+        
               const SizedBox(height: 10),
               Align(
                  alignment: Alignment.centerLeft,
@@ -152,6 +142,7 @@ DropdownButton(
                   setState(() {
                     valueDropDown = value!;
                   });
+                  controller.handleGender(valueDropDown);
                 }),
                  const SizedBox(height: 10),   
               
@@ -233,13 +224,16 @@ class CustonTextFormField extends StatelessWidget {
  final Function(String)? onChanged;
  final Icon preIcon;
  final TextInputFormatter? format;
+ final TextInputType? type;
+
   const CustonTextFormField({
-    super.key, required this.labelTxt, this.onChanged, required this.preIcon, this.format,
+    super.key, required this.labelTxt, this.onChanged, required this.preIcon, this.format, this.type,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: type ?? TextInputType.text,
       inputFormatters: [format ?? FilteringTextInputFormatter.singleLineFormatter],
       onChanged: onChanged,
       decoration: InputDecoration(

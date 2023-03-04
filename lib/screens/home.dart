@@ -41,7 +41,8 @@ class HomeScreen extends StatelessWidget {
                   "Explora las mejores opciones laborales\nbasadas en tus intereses y estudios",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                  
+                  const 
+                  SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

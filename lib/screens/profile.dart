@@ -8,9 +8,10 @@ import '../models/usuario.dart';
 class ProfileScreen extends StatelessWidget {
   final Usuario usuario;
   final String id;
+  final String? imageName;
   final controller = Get.put(ProfileController());
 
-   ProfileScreen({super.key, required this.usuario, required this.id});
+   ProfileScreen({super.key, required this.usuario, required this.id, this.imageName});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,9 @@ class ProfileScreen extends StatelessWidget {
               resizeToAvoidBottomInset: false, 
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(255, 240, 103, 103),
+        backgroundColor: const Color.fromARGB(255, 240, 103, 103),
         onPressed: () {
-          controller.handleEliminate(id);
+          controller.handleEliminate(id,imageName);
         },
         child: const Icon(Icons.delete),
       ),
@@ -36,13 +37,13 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
-            const CircleAvatar(
+             CircleAvatar(
               radius: 50,
               backgroundColor: Colors.blue,
               child: CircleAvatar(
                 radius: 73,
                 backgroundImage: NetworkImage(
-                    'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
+                    usuario.imageProfile),
               ),
             ),
             const SizedBox(
@@ -87,29 +88,30 @@ class CustomListtileName extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
         trailing: IconButton(
-          icon: const Icon(Icons.edit),
+          icon: const Icon(Icons.edit, color: Color.fromARGB(255, 240, 103, 103)),
           onPressed: () {
             showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                      title: const Text('Editar'),
+                      title: const Text('Editar Nombre'),
                       content:  TextField(
                         onChanged: (value){
                           controller.handleName(value);
-                         
                         },
                                             ),
                       actions: [
-                        TextButton(onPressed: () {
-                          controller.handleUpdateName(id);
-                           Navigator.of(context, rootNavigator: true).pop();
-                        }, child: const Text('ok')),
+                        
                         TextButton(
                             onPressed: () {
+                               controller.handleName("");
                                                         Navigator.of(context, rootNavigator: true).pop();
 
-                            }, child: const Text('cancelar')),
-                      ],
+                            }, child: const Text('Cancelar',style: TextStyle(color: Colors.grey,fontSize: 16,fontWeight:FontWeight.bold),)),
+                      TextButton(onPressed: () {
+                          controller.handleUpdateName(id);
+                           Navigator.of(context, rootNavigator: true).pop();
+                        }, child: const Text('Aceptar',style: TextStyle(color: Colors.grey,fontSize: 16,fontWeight:FontWeight.bold))),
+                        ],
                     ));
           },
         ),
@@ -137,28 +139,29 @@ class CustomListtileEmail extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
         trailing: IconButton(
-          icon: const Icon(Icons.edit),
+          icon: const Icon(Icons.edit,color: Color.fromARGB(255, 240, 103, 103)),
           onPressed: () {
             showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                      title: const Text('Editar'),
+                      title: const Text('Editar Email'),
                       content:  TextField(
                         onChanged: (value){
                           controller.handleEmail(value);
                         },
                       ),
                       actions: [
-                        TextButton(onPressed: () {controller.handleUpdateEmail(id);
-                                                    Navigator.of(context, rootNavigator: true).pop();
-
-                        }, child: const Text('ok')),
+                        
                         TextButton(
                             onPressed: () {
+                              controller.handleEmail("");
                                                         Navigator.of(context, rootNavigator: true).pop();
 
-                            }, child: const Text('cancelar')),
-                      ],
+                            }, child: const Text('Cancelar',style: TextStyle(color: Colors.grey,fontSize: 16,fontWeight:FontWeight.bold))),
+                      TextButton(onPressed: () {controller.handleUpdateEmail(id);
+                                                    Navigator.of(context, rootNavigator: true).pop();
+
+                        }, child: const Text('Aceptar',style: TextStyle(color: Colors.grey,fontSize: 16,fontWeight:FontWeight.bold),)),],
                     ));
           },
         ),
